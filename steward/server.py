@@ -19,10 +19,9 @@ class StewardServer:
     """
     def __init__(self, event_emitter=None):
         self._server_socket = None
-        self._running = True
+        self._running = False
         self._clients = {}
 
-        self._validate_environment()    
 
     def _validate_environment(self):
         """
@@ -30,15 +29,14 @@ class StewardServer:
         """
         logger.info("Checking environment...")
         # Confirm we have the ENV variables we need
-        messages = []
+        success = True
         for name in ["STEWARD_SOCKET_HOST", "STEWARD_SOCKET_PORT"]:
             if name not in os.environ or not os.getenv(name):
-                messages.append(f"Missing ENV variables: {name}")
+                logger.error(f'Missing ENV variable: {name}')
+                success = False
         
-        if messages:
-            for msg in messages:
-                logger.error(msg)
-            
+        if not success:
+            logger.error("Invalid environment.  Exiting")
             sys.exit(1)
 
         logger.info('Environment checks completed')
@@ -49,6 +47,9 @@ class StewardServer:
         """
         # included logic here to setup, configure, and launch the system
         # including scanning for plugins, establishing connections, etc.
+
+        # confirm the environment is configured
+        self._validate_environment()    
 
         # Start the steward socket server
         self._start_socket_server()
@@ -66,7 +67,8 @@ class StewardServer:
                 logger.error("    ERROR Disconnecting {client_address}")
 
         self._server_socket.close()
-        sys.exit(0)
+        self._running = False
+        # sys.exit(0)
 
     def _start_socket_server(self):
         """
@@ -75,6 +77,9 @@ class StewardServer:
         host = os.getenv("STEWARD_SOCKET_HOST")
         port = int(os.getenv("STEWARD_SOCKET_PORT"))
         server_address = (host, port)
+
+        # indicate the server is running
+        self._running = True
 
         # Create a socket
         logger.info("Starting socket service")
