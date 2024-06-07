@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="structure.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.60756173"
+     inkscape:cx="600.762"
+     inkscape:cy="487.19329"
+     inkscape:window-width="2560"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#b3ff80;stroke-width:0.264583"
+       id="rect111"
+       width="146.75806"
+       height="72.290321"
+       x="25.693548"
+       y="89.274193" />
+    <rect
+       style="fill:#ffccaa;stroke-width:0.264583"
+       id="rect381"
+       width="146.75806"
+       height="72.290321"
+       x="25.693548"
+       y="178.98387" />
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.264583"
+       id="rect435"
+       width="38.540321"
+       height="21.991936"
+       x="34.838707"
+       y="214.54146"
+       ry="6.3145161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="47.019089"
+       y="226.6709"
+       id="text543"><tspan
+         sodipodi:role="line"
+         id="tspan541"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="47.019089"
+         y="226.6709">PLUGINS</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.264583"
+       id="rect545"
+       width="38.540321"
+       height="21.991936"
+       x="76.427414"
+       y="214.54146"
+       ry="6.3145161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="89.723816"
+       y="226.6709"
+       id="text549"><tspan
+         sodipodi:role="line"
+         id="tspan547"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="89.723816"
+         y="226.6709">EVENTS</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.264583"
+       id="rect653"
+       width="38.540321"
+       height="21.991936"
+       x="119.32258"
+       y="214.54146"
+       ry="6.3145161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="132.61897"
+       y="226.6709"
+       id="text657"><tspan
+         sodipodi:role="line"
+         id="tspan655"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="132.61897"
+         y="226.6709">LOGGING</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.314918"
+       id="rect659"
+       width="131.29839"
+       height="9.1451616"
+       x="31.994003"
+       y="187.4604"
+       ry="2.6258385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="79.518715"
+       y="193.16805"
+       id="text663"><tspan
+         sodipodi:role="line"
+         id="tspan661"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="79.518715"
+         y="193.16805">SOCKET CONNECTIONS</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.314918"
+       id="rect665"
+       width="131.29839"
+       height="9.1451616"
+       x="31.994003"
+       y="146.30717"
+       ry="2.6258385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="79.518715"
+       y="152.01482"
+       id="text669"><tspan
+         sodipodi:role="line"
+         id="tspan667"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="79.518715"
+         y="152.01482">SOCKET CONNECTION</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.264583"
+       id="rect671"
+       width="38.540321"
+       height="21.991936"
+       x="34.838707"
+       y="99.290314"
+       ry="6.3145161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="48.292267"
+       y="111.47691"
+       id="text675"><tspan
+         sodipodi:role="line"
+         id="tspan673"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="48.292267"
+         y="111.47691">iNPUTS</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.264583"
+       id="rect677"
+       width="38.540321"
+       height="21.991936"
+       x="76.427414"
+       y="99.290314"
+       ry="6.3145161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="85.666161"
+       y="111.42134"
+       id="text681"><tspan
+         sodipodi:role="line"
+         id="tspan679"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="85.666161"
+         y="111.42134">PROCESSING</tspan></text>
+    <rect
+       style="fill:#e6e6e6;stroke-width:0.264583"
+       id="rect683"
+       width="38.540321"
+       height="21.991936"
+       x="119.32258"
+       y="99.290314"
+       ry="6.3145161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#666666;stroke-width:0.264583"
+       x="131.19023"
+       y="111.42134"
+       id="text687"><tspan
+         sodipodi:role="line"
+         id="tspan685"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         x="131.19023"
+         y="111.42134">OUTPUTS</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;stroke-width:0.264583"
+       x="27.695116"
+       y="93.223007"
+       id="text737"><tspan
+         sodipodi:role="line"
+         id="tspan735"
+         style="fill:#000000;stroke-width:0.264583"
+         x="27.695116"
+         y="93.223007">Client</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;stroke-width:0.264583"
+       x="28.175924"
+       y="247.5786"
+       id="text843"><tspan
+         sodipodi:role="line"
+         id="tspan841"
+         style="stroke-width:0.264583"
+         x="28.175924"
+         y="247.5786">Server</tspan></text>
+  </g>
+</svg>
