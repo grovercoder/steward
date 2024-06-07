@@ -4,10 +4,27 @@ import sys
 # Define colors
 COLORS = {
     'DEFAULT': '\033[0m',
-    'INFO': '\033[94m',    # Blue
-    'WARNING': '\033[93m', # Yellow
-    'ERROR': '\033[91m'    # Red
+    'BLACK': '\033[30m',
+    'BLUE': '\033[34m',
+    'BRIGHT_BLACK': '\033[90m',
+    'BRIGHT_BLUE': '\033[94m',
+    'BRIGHT_CYAN': '\033[96m',
+    'BRIGHT_GREEN': '\033[92m',
+    'BRIGHT_MAGENTA': '\033[95m',
+    'BRIGHT_RED': '\033[91m',
+    'BRIGHT_WHITE': '\033[97m',
+    'BRIGHT_YELLOW': '\033[93m',
+    'CYAN': '\033[36m',
+    'GREEN': '\033[32m',
+    'MAGENTA': '\033[35m',
+    'RED': '\033[31m',
+    'WHITE': '\033[37m',
+    'YELLOW': '\033[33m',
 }
+COLORS['INFO'] = COLORS['BRIGHT_BLUE']
+COLORS['WARNING'] = COLORS['BRIGHT_YELLOW']
+COLORS['WARN'] = COLORS['BRIGHT_YELLOW']
+COLORS['ERROR'] = COLORS['BRIGHT_RED']
 
 # Define formatter
 class ColoredFormatter(logging.Formatter):
