@@ -1,5 +1,8 @@
+import copy
 import logging
 import sys
+from logging.handlers import RotatingFileHandler
+from nanoid import generate
 
 # Define colors
 COLORS = {
@@ -29,26 +32,40 @@ COLORS['ERROR'] = COLORS['BRIGHT_RED']
 # Define formatter
 class ColoredFormatter(logging.Formatter):
     def format(self, record):
-        levelname = record.levelname
+        clone = copy.deepcopy(record)
+        levelname = clone.levelname
         color = COLORS.get(levelname, COLORS['DEFAULT'])
-        record.levelname = f"{color}{levelname}{COLORS['DEFAULT']}"
-        return super().format(record)
+        clone.levelname = f"{color}{levelname}{COLORS['DEFAULT']}"
+        return super().format(clone)
 
 class FileFormatter(logging.Formatter):
     def format(self, record):
-        return super().format(record)
+        clone = copy.deepcopy(record)
+        return super().format(clone)
 
-# Create logger instance
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+def get_logger(name=None, level="INFO", console=False, file=None, mode="a"):
+    """
+    Generate a logging object
+    """
+    if not name:
+        # set the name to a unique identifier 
+        name = f"L{generate(size=8)}"
 
-# Create file handler with default formatter
-file_handler = logging.FileHandler('logfile.log', mode="w" )
-file_handler.setFormatter(FileFormatter('[%(asctime)s][%(levelname)s] %(message)s'))
-logger.addHandler(file_handler)
+    output = logging.getLogger(name)
+    output.setLevel(level)
+    
+    if console:
+        ch = logging.StreamHandler(sys.stdout)
+        ch.setLevel(level)
+        ch.setFormatter(ColoredFormatter(f'[%(asctime)s][%(levelname)s] %(message)s'))
+        output.addHandler(ch)
+    
+    if file:
+        fh = RotatingFileHandler(file, maxBytes=2000, backupCount=10, mode=mode)
+        fh.setLevel(level)
+        fh.setFormatter(FileFormatter('[%(asctime)s][%(levelname)s] %(message)s'))
+        output.addHandler(fh)
+    
+    return output
 
-# console handler
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setFormatter(ColoredFormatter(f'[%(asctime)s][%(levelname)s] %(message)s'))
-logger.addHandler(console_handler)
 

@@ -8,11 +8,11 @@ import threading
 
 from dotenv import load_dotenv
 
-from steward.logger import logger
+from steward.logger import get_logger
 
 # load the environment variables
 load_dotenv()
-
+logger = get_logger(name="Steward", console=True, file="logfile.log")
 class StewardServer:
     """
     The Steward Server
