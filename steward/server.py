@@ -111,6 +111,10 @@ class StewardServer:
         # remember the client connection
         self._clients[client_address] = connection
         logger.info(f"client connection: {client_address}")
+        
+        data = "welcome"
+        msg = pickle.dumps(data)
+        connection.sendall(msg)
 
         # respond to incoming messages from the client
         try:
