@@ -20,6 +20,7 @@ COLORS = {
     'CYAN': '\033[36m',
     'GREEN': '\033[32m',
     'MAGENTA': '\033[35m',
+    'ORANGE': '\033[38;5;208m',
     'RED': '\033[31m',
     'WHITE': '\033[37m',
     'YELLOW': '\033[33m',
@@ -28,6 +29,8 @@ COLORS['INFO'] = COLORS['BRIGHT_BLUE']
 COLORS['WARNING'] = COLORS['BRIGHT_YELLOW']
 COLORS['WARN'] = COLORS['BRIGHT_YELLOW']
 COLORS['ERROR'] = COLORS['BRIGHT_RED']
+COLORS['DEBUG'] = COLORS['ORANGE']
+
 
 # Define formatter
 class ColoredFormatter(logging.Formatter):
@@ -56,13 +59,14 @@ def get_logger(name=None, level="INFO", console=False, file=None, mode="a"):
     
     if console:
         ch = logging.StreamHandler(sys.stdout)
-        ch.setLevel(level)
+        # ch.setLevel(level)
         ch.setFormatter(ColoredFormatter(f'[%(asctime)s][%(levelname)s] %(message)s'))
         output.addHandler(ch)
     
     if file:
-        fh = RotatingFileHandler(file, maxBytes=2000, backupCount=10, mode=mode)
-        fh.setLevel(level)
+        # setting the maxBytes to 10MB
+        fh = RotatingFileHandler(file, maxBytes=10 * 1024 * 1024, backupCount=10, mode=mode)
+        # fh.setLevel(level)
         fh.setFormatter(FileFormatter('[%(asctime)s][%(levelname)s] %(message)s'))
         output.addHandler(fh)
     
