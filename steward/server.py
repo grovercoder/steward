@@ -3,6 +3,7 @@ import os
 import importlib.util
 import inspect
 import select
+import signal
 import socket
 import sys
 import threading
@@ -24,8 +25,16 @@ class StewardServer:
         self._server_socket = None
         self._running = False
         self._clients = {}
+        self._client_threads = []
         self.logger = get_logger(name="Steward", level=logLevel, console=True, file="logs/server.log")
-    
+        
+        # catch and handle the interrupt signal
+        signal.signal(signal.SIGINT, self._signal_handler)
+
+    def _signal_handler(self, signum, frame):
+        self.logger.warn('Interrupt signal received')
+        self.stop()
+
     def _validate_environment(self):
         """
         Fail loudly if environment or configurations are not set properly
@@ -62,6 +71,8 @@ class StewardServer:
         Stop the Steward
         """
         self.logger.warn("Stopping Socket Server")
+        self._running = False
+
         for client_address, conn in list(self._clients.items()):
             try:
                 self.logger.info(f" - notifying client: {client_address}")
@@ -79,10 +90,17 @@ class StewardServer:
             except Exception as e:
                 print(e)
                 self.logger.error(f"ERROR Disconnecting {client_address}")
+        
+        # Close the server socket
+        if self._server_socket:
+            self._server_socket.close()
 
-        self._server_socket.close()
-        self._running = False
-        # sys.exit(0)
+        # Join all client threads
+        for thread in self._client_threads:
+            thread.join()
+
+        self.logger.info("Steward server stopped")
+        sys.exit(0)
 
     def _is_socket_connected(self, conn):
         try:
@@ -111,6 +129,7 @@ class StewardServer:
         self._server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self._server_socket.bind(server_address)
         self._server_socket.listen(5)
+        self._server_socket.settimeout(1)
         self.logger.info("Listening for connections")
 
         while self._running:
@@ -120,6 +139,8 @@ class StewardServer:
                 # create a new thread for each client connection
                 client_handler = threading.Thread(target=self._handle_client, args=(connection, client_address))
                 client_handler.start()
+                self._client_threads.append(client_handler)
+
             except socket.timeout:
                 continue
             except KeyboardInterrupt:
@@ -127,7 +148,7 @@ class StewardServer:
                 break
             except Exception as e:
                 if self._running:
-                    print(f"Error accepting connections: {e}")
+                    self.logger.error(f"Error accepting connection: {e}")
                  
     def _handle_client(self, connection, client_address):
         """
@@ -140,16 +161,22 @@ class StewardServer:
         data = "welcome"
         message = pickle.dumps(data)
         connection.sendall(message)
-        self.logger.debug('wecomone sent')
+        self.logger.debug('welcome sent')
 
         # respond to incoming messages from the client
         try:
-            while True:
+            while self._running:
                 data = connection.recv(4096)
 
                 if data:
                     message = pickle.loads(data)
                     self.logger.debug(f"[{client_address}]: {message}")
+
+                    if isinstance(message, StewardEvent):
+                        if message.name == 'CLIENT_DISCONNECT':
+                            del self._clients[client_address]
+                            self.logger.info(f"Client Disconnected: {client_address}")
+                            break
 
         except Exception as e:
             self.logger.error(f"client error [{client_address}] {e}")

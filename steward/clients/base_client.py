@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import time
 
 from steward.logger import get_logger, COLORS
+from steward.event import StewardEvent
 
 load_dotenv()
 
@@ -36,10 +37,14 @@ class BaseClient:
 
     def start(self):
         self.connect()
-        self.listen()
+        if self._running:
+            self.listen()
 
     def stop(self):
         self.logger.info(f'stopping client: [{self.id}]...')
+        msg = StewardEvent(name="CLIENT_DISCONNECT")
+        self._client_socket.sendall(msg.serialize())
+        
         self._listening.clear()
         self.logger.debug('...cleared listening flag')
         time.sleep(0.5)
@@ -85,7 +90,11 @@ class BaseClient:
             self.logger.info(f'Connecting to server {server_address}')
             self._client_socket.connect(server_address)
             self._running = True
-            
+        
+        except ConnectionRefusedError:
+            self.logger.error('Could not connect to server')
+            self._running = False
+
         except Exception as e:
             self.logger.error(f"Connection error: {e}")
         
@@ -112,10 +121,9 @@ class BaseClient:
         self._receiver.daemon = True
         self._receiver.start()
         self._listening.set()
-        self.logger.debug('Listening...')
 
     def _receive(self):
-        self.logger.debug('reception starting')
+        self.logger.debug('Starting receiver')
         while self._listening and self._listening.is_set():
             try:
                 data = self._client_socket.recv(4096)
