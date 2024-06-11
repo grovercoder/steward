@@ -1,4 +1,4 @@
 from steward.server import StewardServer
 
-srv = StewardServer()
+srv = StewardServer(logLevel="DEBUG")
 srv.start()

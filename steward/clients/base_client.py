@@ -25,13 +25,14 @@ class BaseClient:
             id = f'C:{generate(size=10)}'
         
         self.id = id
-        self.logger = get_logger(name=self.id, console=True, file="client.log")
+        self.logger = get_logger(name=self.id, console=True, file="logs/client.log")
         self._client_socket = None
         self._running = False
         self._SOCKET_HOST = socket_host
         self._SOCKET_PORT = socket_port
         self._receiver = None
         self._listening = threading.Event()
+        self._stop_signal = threading.Event()
 
     def start(self):
         self.connect()
@@ -41,8 +42,12 @@ class BaseClient:
         self.logger.info(f'stopping client: [{self.id}]...')
         self._listening.clear()
         self.logger.debug('...cleared listening flag')
+        time.sleep(0.5)
         if self._receiver and self._receiver.is_alive():
             self.logger.debug('...receiver still active - waiting for shut down')
+            # I know this SHOULD be done to wait for the thread to stop.
+            # But it is throwing a "cannot join current thread" error.  
+            # More investigation needed.
             self._receiver.join(timeout=5)
         self.logger.debug('... reception stopped')
         self.disconnect()
@@ -52,7 +57,7 @@ class BaseClient:
         self._start_receiver()
 
         try:
-            while self._running:
+            while self._running and not self._stop_signal.is_set():
                 self.client_actions()
 
         except KeyboardInterrupt:

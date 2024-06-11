@@ -1,5 +1,6 @@
 from steward.clients.base_client import BaseClient
 from steward.logger import COLORS
+from steward.event import StewardEvent
 
 class ConsoleClient(BaseClient):
     def __init__(self, *args, **kwargs):
@@ -15,5 +16,10 @@ class ConsoleClient(BaseClient):
         self.logger.info(f'[CONSOLE] MSG: {message}')
         if message == 'welcome':
             self.send("thanks")
+        
+        if isinstance(message, StewardEvent):
+            if message.name == "STEWARD_STOPPING":
+                self.logger.warn("Server has stopped")
+                self._stop_signal.set()
 
             

@@ -2,6 +2,7 @@ import pickle
 import os
 import importlib.util
 import inspect
+import select
 import socket
 import sys
 import threading
@@ -10,38 +11,38 @@ import time
 from dotenv import load_dotenv
 
 from steward.logger import get_logger
+from steward.event import StewardEvent
 
 # load the environment variables
 load_dotenv()
-logger = get_logger(name="Steward", level="DEBUG", console=True, file="logfile.log")
 
 class StewardServer:
     """
     The Steward Server
     """
-    def __init__(self, event_emitter=None):
+    def __init__(self, event_emitter=None, logLevel="INFO"):
         self._server_socket = None
         self._running = False
         self._clients = {}
-
-
+        self.logger = get_logger(name="Steward", level=logLevel, console=True, file="logs/server.log")
+    
     def _validate_environment(self):
         """
         Fail loudly if environment or configurations are not set properly
         """
-        logger.info("Checking environment...")
+        self.logger.info("Checking environment...")
         # Confirm we have the ENV variables we need
         success = True
         for name in ["STEWARD_SOCKET_HOST", "STEWARD_SOCKET_PORT"]:
             if name not in os.environ or not os.getenv(name):
-                logger.error(f'Missing ENV variable: {name}')
+                self.logger.error(f'Missing ENV variable: {name}')
                 success = False
         
         if not success:
-            logger.error("Invalid environment.  Exiting")
+            self.logger.error("Invalid environment.  Exiting")
             sys.exit(1)
 
-        logger.info('Environment checks completed')
+        self.logger.info('Environment checks completed')
 
     def start(self):
         """
@@ -60,18 +61,39 @@ class StewardServer:
         """
         Stop the Steward
         """
-        logger.warn("Stopping Socket Server")
-        for client_address, conn in self._clients.items():
+        self.logger.warn("Stopping Socket Server")
+        for client_address, conn in list(self._clients.items()):
             try:
-                logger.info(f"  - disconnecting client: {client_address}")
-                conn.close()
+                self.logger.info(f" - notifying client: {client_address}")
+                msg = StewardEvent(name="STEWARD_STOPPING")
+                serialized = msg.serialize()
+                conn.sendall(serialized)
+
+                time.sleep(0.5)
+
+                if self._is_socket_connected(conn):
+                    conn.close()                
+                
+                del self._clients[client_address]
+
             except Exception as e:
-                logger.error("    ERROR Disconnecting {client_address}")
+                print(e)
+                self.logger.error(f"ERROR Disconnecting {client_address}")
 
         self._server_socket.close()
         self._running = False
         # sys.exit(0)
 
+    def _is_socket_connected(self, conn):
+        try:
+            # Use select to check for socket status
+            ready_to_read, ready_to_write, in_error = select.select([conn], [conn], [conn], 0)
+            if in_error:
+                return False
+            return True
+        except Exception as e:
+            return False
+        
     def _start_socket_server(self):
         """
         Start the socket server
@@ -84,11 +106,12 @@ class StewardServer:
         self._running = True
 
         # Create a socket
-        logger.info("Starting socket service")
+        self.logger.info("Starting socket service")
         self._server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self._server_socket.bind(server_address)
         self._server_socket.listen(5)
-        logger.info("Listening for connections")
+        self.logger.info("Listening for connections")
 
         while self._running:
             try:
@@ -112,13 +135,12 @@ class StewardServer:
         """
         # remember the client connection
         self._clients[client_address] = connection
-        logger.info(f"client connection: {client_address}")
+        self.logger.info(f"client connection: {client_address}")
         
-        time.sleep(2)
         data = "welcome"
         message = pickle.dumps(data)
         connection.sendall(message)
-        logger.debug('wecomone sent')
+        self.logger.debug('wecomone sent')
 
         # respond to incoming messages from the client
         try:
@@ -127,15 +149,17 @@ class StewardServer:
 
                 if data:
                     message = pickle.loads(data)
-                    logger.debug(f"[{client_address}]: {message}")
+                    self.logger.debug(f"[{client_address}]: {message}")
 
         except Exception as e:
-            logger.error(f"client error [{client_address}] {e}")
+            self.logger.error(f"client error [{client_address}] {e}")
         finally:
-            # close the connection
-            connection.close()
+            if self._is_socket_connected(connection):
+                # close the connection
+                connection.close()
 
             # remove the client from the clients list
-            del self._clients[client_address]
+            if client_address in self._clients:
+                del self._clients[client_address]
 
 
