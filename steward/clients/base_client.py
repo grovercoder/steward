@@ -31,7 +31,7 @@ class BaseClient:
         self._SOCKET_HOST = socket_host
         self._SOCKET_PORT = socket_port
         self._receiver = None
-        self._listening = False
+        self._listening = threading.Event()
 
     def start(self):
         self.connect()
@@ -41,9 +41,9 @@ class BaseClient:
         self.logger.info(f'stopping client: [{self.id}]...')
         self._listening.clear()
         self.logger.debug('...cleared listening flag')
-        if self._receiver.is_alive():
+        if self._receiver and self._receiver.is_alive():
             self.logger.debug('...receiver still active - waiting for shut down')
-            self._receiver.join()
+            self._receiver.join(timeout=5)
         self.logger.debug('... reception stopped')
         self.disconnect()
         self.logger.info('Client shutdown completed')
@@ -106,25 +106,31 @@ class BaseClient:
         self._receiver = threading.Thread(target=self._receive)
         self._receiver.daemon = True
         self._receiver.start()
-        self._listening = threading.Event()
+        self._listening.set()
         self.logger.debug('Listening...')
 
     def _receive(self):
+        self.logger.debug('reception starting')
         while self._listening and self._listening.is_set():
             try:
                 data = self._client_socket.recv(4096)
                 if data:
+                    self.logger.debug(f'msg: {data}')
                     message = pickle.loads(data)
                     self.logger.debug(f"data received: {message}")
                     self._handle_message(message)
   
             except Exception as e:
-                self._logger.error(f'Reception Error: {e}')
+                self.logger.error(f'Reception Error: {e}')
                 break
-            finally:
-                self._receiver.join()
+    
+    def send(self, data):
+        if data:
+            self.logger.debug(f"SENDING: {data}")
+            msg = pickle.dumps(data)
+            self._client_socket.sendall(msg)
+            self.logger.debug(f"SENT: {msg}")
 
-        
 
     @abstractmethod
     def _handle_message(self, message):

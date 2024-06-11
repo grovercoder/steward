@@ -5,6 +5,7 @@ import inspect
 import socket
 import sys
 import threading
+import time
 
 from dotenv import load_dotenv
 
@@ -12,7 +13,8 @@ from steward.logger import get_logger
 
 # load the environment variables
 load_dotenv()
-logger = get_logger(name="Steward", console=True, file="logfile.log")
+logger = get_logger(name="Steward", level="DEBUG", console=True, file="logfile.log")
+
 class StewardServer:
     """
     The Steward Server
@@ -112,20 +114,20 @@ class StewardServer:
         self._clients[client_address] = connection
         logger.info(f"client connection: {client_address}")
         
+        time.sleep(2)
         data = "welcome"
-        msg = pickle.dumps(data)
-        connection.sendall(msg)
+        message = pickle.dumps(data)
+        connection.sendall(message)
+        logger.debug('wecomone sent')
 
         # respond to incoming messages from the client
         try:
             while True:
                 data = connection.recv(4096)
-                if not data:
-                    break
 
-                message = pickle.loads(data)
-
-                logger.log(f"[{client_address}]: message")
+                if data:
+                    message = pickle.loads(data)
+                    logger.debug(f"[{client_address}]: {message}")
 
         except Exception as e:
             logger.error(f"client error [{client_address}] {e}")

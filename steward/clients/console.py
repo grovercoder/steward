@@ -12,4 +12,8 @@ class ConsoleClient(BaseClient):
         self.prompt = f"{COLORS['GREEN']}Steward: {COLORS['DEFAULT']}"
 
     def _handle_message(self, message):
-        self.logger.info(f'MSG: {message}')
+        self.logger.info(f'[CONSOLE] MSG: {message}')
+        if message == 'welcome':
+            self.send("thanks")
+
+            
