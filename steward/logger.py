@@ -1,5 +1,6 @@
 import copy
 import logging
+import os
 import sys
 from logging.handlers import RotatingFileHandler
 from nanoid import generate
@@ -64,6 +65,10 @@ def get_logger(name=None, level="INFO", console=False, file=None, mode="a"):
         output.addHandler(ch)
     
     if file:
+        if not os.path.exists(file):
+            dirname = os.path.dirname(file)
+            os.makedirs(dirname, exist_ok=True)
+
         # setting the maxBytes to 10MB
         fh = RotatingFileHandler(file, maxBytes=10 * 1024 * 1024, backupCount=10, mode=mode)
         # fh.setLevel(level)
