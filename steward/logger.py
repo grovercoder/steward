@@ -75,6 +75,15 @@ def get_logger(name=None, level="INFO", console=False, file=None, mode="a"):
         fh.setFormatter(FileFormatter('[%(asctime)s][%(levelname)s] %(message)s'))
         output.addHandler(fh)
     
+    # Map log levels to the specific log methods
+    output.log_methods = {
+        "DEBUG": output.debug,
+        "INFO": output.info,
+        "WARNING": output.warning,
+        "ERROR": output.error,
+        "CRITICAL": output.critical
+    }
+
     return output
 
 
