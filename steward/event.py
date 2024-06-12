@@ -8,8 +8,8 @@ class StewardEvent:
         self.name = name
         self.timestamp = int(time.time() * 1000)
         # ID of event that triggered this event (is this a response event)
-        self.triggering_event = None
-        self.payload = None
+        self.triggering_event = trigger_event
+        self.payload = payload
 
     def serialize(self):
         return pickle.dumps(self)
