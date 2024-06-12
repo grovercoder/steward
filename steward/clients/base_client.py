@@ -18,14 +18,16 @@ class BaseClient:
 
     Specific clients are expected to be based on this class.
     """
-
     def __init__(self, id=None, socket_host=None, socket_port=None):
         super().__init__()
 
         if not id:
-            id = f'C:{generate(size=10)}'
+            id = f'C:{generate(size=10, alphabet="ABCDEFGHJKMNPQRSTUVWXYZ0123456789_@#$&")}'
+        else:
+            id = f'{id}:{generate(size=10, alphabet="ABCDEFGHJKMNPQRSTUVWXYZ0123456789_@#$&")}'
         
         self.id = id
+        self.client_type = 'GENERAL'
         self.logger = get_logger(name=self.id, console=True, file="logs/client.log")
         self._client_socket = None
         self._running = False
@@ -44,7 +46,7 @@ class BaseClient:
         self.logger.info(f'stopping client: [{self.id}]...')
         msg = StewardEvent(name="CLIENT_DISCONNECT")
         self._client_socket.sendall(msg.serialize())
-        
+
         self._listening.clear()
         self.logger.debug('...cleared listening flag')
         time.sleep(0.5)
@@ -121,6 +123,16 @@ class BaseClient:
         self._receiver.daemon = True
         self._receiver.start()
         self._listening.set()
+
+        # client is ready to receive messages, register the client with the server
+        # registration gives the server more information about the client
+        data = {
+            "id": self.id,
+            "type": self.client_type
+        }
+        msg = StewardEvent(name="CLIENT_REGISTER", payload=data)
+        self._client_socket.sendall(msg.serialize())
+
 
     def _receive(self):
         self.logger.debug('Starting receiver')
