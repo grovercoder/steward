@@ -3,7 +3,9 @@ services:
   mosquitto:
     image: eclipse-mosquitto
     ports:
-      - "1883:1883"
-      - "9001:9001"
-    # volumes:
-    #   - ./mosquitto.conf:/mosquitto/config/mosquitto.conf  # Optional: Mount custom configuration
+      # - "1883:1883"
+      # - "9001:9001"
+      - "${STEWARD_MQTT_PORT}:1883"
+      - "${STEWARD_MQTT_WS_PORT}:9001"
+    volumes:
+      - ${PWD}/mosquitto.conf:/mosquitto/config/mosquitto.conf  # Optional: Mount custom configuration
