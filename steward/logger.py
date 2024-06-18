@@ -87,3 +87,21 @@ def get_logger(name=None, level="INFO", console=False, file=None, mode="a"):
     return output
 
 
+def root_logger():
+    # Setup root logger to capture all messages
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)  # Capture all messages
+
+    # Create a file handler for the root logger
+    file_handler = logging.FileHandler('logs/all_events.log')
+    file_handler.setLevel(logging.DEBUG)  # Ensure all messages are captured
+
+    # Create a formatter for the root logger
+    formatter = logging.Formatter('[%(asctime)s][%(name)s][%(levelname)s] %(message)s')  
+    file_handler.setFormatter(formatter)
+
+    # Add the file handler to the root logger
+    root_logger.addHandler(file_handler)
+
+    return root_logger
+

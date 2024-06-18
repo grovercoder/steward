@@ -1,4 +1,6 @@
 from steward.server import StewardServer
+from steward.logger import root_logger
 
-srv = StewardServer(logLevel="DEBUG")
-srv.start()
+root_logger().info("Starting Steward Server")
+srv = StewardServer(level="DEBUG")
+srv.connect()
